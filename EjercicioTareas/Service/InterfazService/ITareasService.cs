@@ -10,6 +10,12 @@ namespace EjercicioTareas.Service.InterfazService
 
         public Task<List<Tarea>> GetAllTareasEliminadasAsync();
 
+        public Task<List<Tarea>> GetAllTareasPendientesAsync();
+
+        public Task<List<Tarea>> GetAllTareasEnCursoAsync();
+
+        public Task<List<Tarea>> GetAllTareasFinalizadasAsync();
+
         public Task<bool> AddTareaAsync(TareaDTO tarea);
 
         public Task<bool> UpdateTareaAsync(int id, string estado);

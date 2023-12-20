@@ -25,6 +25,33 @@ namespace EjercicioTareas.Controllers
 
         }
 
+        [HttpGet("Listar tareas PENDIENTES")]
+        public async Task<IActionResult> GetTareasPendientes()
+        {
+            var result = await _tareasService.GetAllTareasPendientesAsync();
+
+            return Ok(result);
+
+        }
+
+        [HttpGet("Listar tareas EN CURSO")]
+        public async Task<IActionResult> GetTareasEnCurso()
+        {
+            var result = await _tareasService.GetAllTareasEnCursoAsync();
+
+            return Ok(result);
+
+        }
+
+        [HttpGet("Listar tareas FINALIZADAS")]
+        public async Task<IActionResult> GetTareasFinalizadas()
+        {
+            var result = await _tareasService.GetAllTareasFinalizadasAsync();
+
+            return Ok(result);
+
+        }
+
         [HttpGet("Listar Eliminadas")]
         public async Task<IActionResult> GetTareasEliminadas()
         {

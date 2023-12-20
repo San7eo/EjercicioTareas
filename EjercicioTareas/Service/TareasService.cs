@@ -22,6 +22,27 @@ namespace EjercicioTareas.Service
                                             .ToListAsync();
         }
 
+        public async Task<List<Tarea>> GetAllTareasPendientesAsync()
+        {
+            return await _todoContext.Tareas
+                                            .Where (w=> w.Activo && w.Estado == "PENDIENTE")
+                                            .ToListAsync();
+        }
+
+        public async Task<List<Tarea>> GetAllTareasEnCursoAsync()
+        {
+            return await _todoContext.Tareas
+                                            .Where(w => w.Activo && w.Estado == "EN CURSO")
+                                            .ToListAsync();
+        }
+
+        public async Task<List<Tarea>> GetAllTareasFinalizadasAsync()
+        {
+            return await _todoContext.Tareas
+                                            .Where(w => w.Activo && w.Estado == "FINALIZADO")
+                                            .ToListAsync();
+        }
+
         public async Task<List<Tarea>> GetAllTareasEliminadasAsync()
         {
             return await _todoContext.Tareas
