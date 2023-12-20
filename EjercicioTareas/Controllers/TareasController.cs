@@ -1,4 +1,5 @@
-﻿using EjercicioTareas.Domain.Entities;
+﻿using EjercicioTareas.Domain.DTO;
+using EjercicioTareas.Domain.Entities;
 using EjercicioTareas.Domain.Request;
 using EjercicioTareas.Service.InterfazService;
 using Microsoft.AspNetCore.Mvc;
@@ -15,8 +16,7 @@ namespace EjercicioTareas.Controllers
             _tareasService = tareasService;
         }
 
-        [HttpGet]
-
+        [HttpGet("Listar tareas")]
         public async Task<IActionResult> GetTareas()
         {
             var result = await _tareasService.GetAllTareasAsync();
@@ -25,24 +25,43 @@ namespace EjercicioTareas.Controllers
 
         }
 
-        [HttpPost]
-        public async Task<IActionResult> AddTarea([FromBody] Tarea request )
+        [HttpGet("Listar Eliminadas")]
+        public async Task<IActionResult> GetTareasEliminadas()
+        {
+            var result = await _tareasService.GetAllTareasEliminadasAsync();
+
+            return Ok(result);
+
+        }
+
+        [HttpPost("Crear Tarea")]
+        public async Task<IActionResult> AddTarea([FromBody] TareaDTO request )
         {
             var result = await _tareasService.AddTareaAsync(request);
 
-            if (!result) return BadRequest(new { Message = "No ha rechazado la tarea!"});
+            if (!result) return BadRequest(new { Message = "Se ha rechazado la tarea!"});
+
             return Created("", new { Message = "Se a creado la tarea correctamente" });
         }
 
-        [HttpPut]
-
+        [HttpPut("Modificar tarea")]
         public async Task<IActionResult> UpdateTarea([FromBody] UpdateTareaRequest request)
         {
-            var result = await _tareasService.UpdateTareaAsync(request.Id, request.InfoTarea);
+            var result = await _tareasService.UpdateTareaAsync(request.Id, request.Estado);
 
             if (!result) return BadRequest(new { Message = "No se pudo modificar la tarea" });
 
             return Ok(new { Message = " Modificada la tarea correctamente " });
+        }
+
+        [HttpDelete("Eliminar tarea")]
+        public async Task<IActionResult> DeleteTarea([FromBody] int id)
+        {
+            var result = await _tareasService.DeleteTareaAsync(id);
+
+            if (!result) return BadRequest(new { Message = "No se pudo eliminar la tarea correctamente" });
+
+            return Ok(new {Message = " Se ha eliminado correctamente la tarea "});
         }
     }
 }

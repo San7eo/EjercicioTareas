@@ -6,6 +6,6 @@ namespace EjercicioTareas.Domain.Request
     {
         public int Id { get; set; }
 
-        public TareaDTO InfoTarea { get; set; }
+        public string Estado { get; set; } = string.Empty;
     }
 }
