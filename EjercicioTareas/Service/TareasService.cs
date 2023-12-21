@@ -1,122 +1,70 @@
 ﻿using EjercicioTareas.Domain.DTO;
 using EjercicioTareas.Domain.Entities;
 using EjercicioTareas.Repository;
+using EjercicioTareas.Repository.Interfaces;
 using EjercicioTareas.Service.InterfazService;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using System.Threading;
 
 namespace EjercicioTareas.Service
 {
     public class TareasService : ITareasService
     {
-        private readonly ToDOContext _todoContext;
+        private readonly ITareaRepository _tareaRepository;
 
-        public TareasService(ToDOContext context)
+        public TareasService(ITareaRepository tareaRepository)
         {
-            _todoContext = context;
+            _tareaRepository = tareaRepository;
         }
-        public async Task<List<Tarea>> GetAllTareasAsync()
+        public async Task<List<Tarea>> GetTareasServiceAsync()
         {
-           return await _todoContext.Tareas
-                                            .Where(w=> w.Activo)
-                                            .ToListAsync();
+           var result = await _tareaRepository.GetAllTareasAsync();
+           return result;
         }
-
-        public async Task<List<Tarea>> GetAllTareasPendientesAsync()
+        public async Task<List<Tarea>> GetTareasEliminadasServiceAsync()
         {
-            return await _todoContext.Tareas
-                                            .Where (w=> w.Activo && w.Estado == "PENDIENTE")
-                                            .ToListAsync();
+            var result = await _tareaRepository.GetTareasEliminadasAsync();
+            return result;
         }
-
-        public async Task<List<Tarea>> GetAllTareasEnCursoAsync()
+        public async Task<List<Tarea>> GetTareasPendientesServiceAsync()
         {
-            return await _todoContext.Tareas
-                                            .Where(w => w.Activo && w.Estado == "EN CURSO")
-                                            .ToListAsync();
+            var result = await _tareaRepository.GetTareasPendientesAsync();
+            return result;
         }
 
-        public async Task<List<Tarea>> GetAllTareasFinalizadasAsync()
+        public async Task<List<Tarea>> GetTareasEnCursoServiceAsync()
         {
-            return await _todoContext.Tareas
-                                            .Where(w => w.Activo && w.Estado == "FINALIZADO")
-                                            .ToListAsync();
+            var result = await _tareaRepository.GetTareasEnCursoAsync();
+            return result;
         }
 
-        public async Task<List<Tarea>> GetAllTareasEliminadasAsync()
+        public async Task<List<Tarea>> GetTareasFinalizadasServiceAsync()
         {
-            return await _todoContext.Tareas
-                                            .Where(w => !w.Activo)
-                                            .ToListAsync();
+            var result = await _tareaRepository.GetTareasFinalizadasAsync();
+            return result;
         }
-        public async Task<bool> AddTareaAsync(TareaDTO tarea)
+
+
+        public async Task<bool> AddTareaServiceAsync(TareaDTO tarea)
         {
-            var newTarea = new Tarea();
-            int rows = 0;
-
-            if ( tarea.Titulo.Trim() != "" && tarea.Descripcion.Trim() != "" )    
-            {
-                
-                newTarea.Titulo = tarea.Titulo;
-
-                newTarea.Descripcion = tarea.Descripcion;
-
-                newTarea.Activo = true;
-
-                newTarea.FechaAlta = DateTime.Now;
-
-                newTarea.FechaModificacion = DateTime.Now;
-
-                if ((tarea.Estado.ToLower().Trim() == "pendiente" || tarea.Estado.ToLower().Trim() == "en curso" || tarea.Estado.ToLower().Trim() == "finalizado"))
-                {   
-
-                    newTarea.Estado = tarea.Estado.ToUpper();
-
-                    await _todoContext.Tareas.AddAsync(newTarea);
-
-                    rows = await _todoContext.SaveChangesAsync();
-                }
-                else if (tarea.Estado.ToLower().Trim() == "" )
-                {
-                    newTarea.Estado = "PENDIENTE";
-
-                    await _todoContext.Tareas.AddAsync(newTarea);
-
-                    rows = await _todoContext.SaveChangesAsync();
-                }
-
-            }
-            return rows > 0;
+            var result = await _tareaRepository.AddTareaAsync(tarea);
+            return result;
         }
 
-        public async Task<bool> UpdateTareaAsync(int id, string estado)
-        {   
-            int rows = 0;
-            var tareaMatch = await _todoContext.Tareas.FirstOrDefaultAsync(t => t.Id == id);
-
-            if (tareaMatch == null) return false;
-
-            if ((estado.ToLower().Trim() == "pendiente" || estado.ToLower().Trim() == "en curso" || estado.ToLower().Trim() == "finalizado"))
-            {
-                tareaMatch.Estado = estado;
-                tareaMatch.FechaModificacion = DateTime.Now;
-                rows = await _todoContext.SaveChangesAsync();
-            }
-         
-            return rows > 0;
-        }
-
-        public async Task<bool> DeleteTareaAsync(int id)
+        public async Task<bool> UpdateTareaServiceAsync(int id, string estado)
         {
-            int rows = 0;
-            var tareaMatch = await _todoContext.Tareas.FirstOrDefaultAsync(t => t.Id == id);
-
-            if (tareaMatch == null) { return false; }
-
-            tareaMatch.Activo = false;
-            rows = await _todoContext.SaveChangesAsync();
-
-            return rows > 0;
+            var result = await _tareaRepository.UpdateTareaAsync(id,estado);
+            return result;
         }
+
+        public async Task<bool> DeleteTareaServiceAsync(int id)
+        {
+            var result = await _tareaRepository.DeleteTareaAsync(id);
+            return result;
+        }
+
+
     }
 }

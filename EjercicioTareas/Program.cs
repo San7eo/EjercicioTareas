@@ -1,4 +1,5 @@
 using EjercicioTareas.Repository;
+using EjercicioTareas.Repository.Interfaces;
 using EjercicioTareas.Service;
 using EjercicioTareas.Service.InterfazService;
 using Microsoft.EntityFrameworkCore;
@@ -20,6 +21,7 @@ namespace EjercicioTareas
                 options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             builder.Services.AddScoped<ITareasService, TareasService>();
+            builder.Services.AddScoped<ITareaRepository, TareaRepository>();
 
             var app = builder.Build();
 

@@ -6,21 +6,21 @@ namespace EjercicioTareas.Service.InterfazService
 {
     public interface ITareasService
     {
-        public Task<List<Tarea>> GetAllTareasAsync();
+        public Task<List<Tarea>> GetTareasServiceAsync();
 
-        public Task<List<Tarea>> GetAllTareasEliminadasAsync();
+        public Task<List<Tarea>> GetTareasEliminadasServiceAsync();
 
-        public Task<List<Tarea>> GetAllTareasPendientesAsync();
+        public Task<List<Tarea>> GetTareasPendientesServiceAsync();
 
-        public Task<List<Tarea>> GetAllTareasEnCursoAsync();
+        public Task<List<Tarea>> GetTareasEnCursoServiceAsync();
 
-        public Task<List<Tarea>> GetAllTareasFinalizadasAsync();
+        public Task<List<Tarea>> GetTareasFinalizadasServiceAsync();
 
-        public Task<bool> AddTareaAsync(TareaDTO tarea);
+        public Task<bool> AddTareaServiceAsync(TareaDTO tarea);
 
-        public Task<bool> UpdateTareaAsync(int id, string estado);
+        public Task<bool> UpdateTareaServiceAsync(int id, string estado);
 
-        public Task<bool> DeleteTareaAsync(int id);
+        public Task<bool> DeleteTareaServiceAsync(int id);
 
     }
 }
